@@ -1,3 +1,13 @@
+//--------------------------------------------------------------------------------
+// フォトインタラプタドライバ
+// [PhotoInterrupters.cpp]
+// Copyright (c) 2020 Ayanosuke(Maison de DCC)
+// https://desktopstation.net/bb/index.php
+//
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+//--------------------------------------------------------------------------------
+
 #include "PhotoInterrupters.h"
 #include  <arduino.h>
 

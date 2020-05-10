@@ -1,3 +1,13 @@
+//--------------------------------------------------------------------------------
+// 4現示抑速信号機ドライバ
+// [FourVigillance.h]
+// Copyright (c) 2020 Ayanosuke(Maison de DCC)
+// https://desktopstation.net/bb/index.php
+//
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+//--------------------------------------------------------------------------------
+
 #ifndef FOURV_H_
 #define FOURV_H_
 
@@ -12,14 +22,14 @@ class FourVigillance
 {
 public:
   FourVigillance( void );
-  unsigned char statechk( void ); 
+  void statechk( void ); 
   void Detection( void );
   int nowState(void);
   
 private:
   int state = 0;
   int cnt = 0;
-  
+    int detf = 0;
   unsigned long PreviosTimer;
 
   enum{

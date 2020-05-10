@@ -1,6 +1,15 @@
+//--------------------------------------------------------------------------------
+// 4現示抑速信号機ドライバ
+// [FourVigillance.cpp]
+// Copyright (c) 2020 Ayanosuke(Maison de DCC)
+// https://desktopstation.net/bb/index.php
+//
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+//--------------------------------------------------------------------------------
+
 #include <arduino.h>
 #include "FourVigillance.h"
-
 
 FourVigillance::FourVigillance(void)
 {
@@ -12,7 +21,8 @@ FourVigillance::FourVigillance(void)
 
 void FourVigillance::Detection(void)
 {
-  state = ST_STOP;
+  detf = HIGH;
+//  state = ST_STOP;
 }
 
 int FourVigillance::nowState(void)
@@ -20,21 +30,30 @@ int FourVigillance::nowState(void)
   return state; 
 }
 
-
-unsigned char FourVigillance::statechk( void ) {
-
-  
+void FourVigillance::statechk( void ) 
+{
+static int prestate = 0;
+if(prestate != state ){
+  Serial.println(state);
+  prestate = state;
+}  
   switch(state){
     case ST_INIT:
               advance();
               state = ST_IDLE;
               break;
-    case ST_IDLE:
-              break;    
+      case ST_IDLE:     //1
+              if(detf == HIGH){
+                detf = LOW;
+                state = ST_STOP;
+              }
+              break; 
     case ST_STOP:
               stops();
+              cnt = 0;
               state = ST_STOPWAIT;
               break;
+              
       case ST_STOPWAIT:
               cnt++;
               if( cnt > STOPSTIM ) {

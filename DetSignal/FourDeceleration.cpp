@@ -1,8 +1,15 @@
+//--------------------------------------------------------------------------------
+// 4現示減速信号機ドライバ
+// [FourDeceleration.cpp]
+// Copyright (c) 2020 Ayanosuke(Maison de DCC)
+// https://desktopstation.net/bb/index.php
+//
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+//--------------------------------------------------------------------------------
 
+#include <arduino.h>
 #include "FourDeceleration.h"
-
-
-
 
 FourDeceleration::FourDeceleration(void)
 {
@@ -22,7 +29,6 @@ int FourDeceleration::nowState()
   return state; 
 }
 
-
 void FourDeceleration::statechk( void ) 
 {
 static int prestate = 0;
@@ -30,7 +36,6 @@ if(prestate != state ){
   Serial.println(state);
   prestate = state;
 }
-//   digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   switch(state){
       case ST_INIT:
               advance();
@@ -73,6 +78,16 @@ if(prestate != state ){
               cnt++;
               if( cnt > DECELEATIONTIM) {
                 cnt = 0;
+                cycle = 0;
+                Deceleration();
+                state = ST_SUPPRESSWAIT;
+              }
+              break;
+
+      case ST_SUPPRESSWAIT:  //5
+              cnt++;
+              if( cnt > SUPPRESSTIM) {
+                cnt = 0;
                 if(onoff == 0) {
                   blank();
                   onoff = 1;
@@ -81,7 +96,7 @@ if(prestate != state ){
                   onoff = 0;
                   cycle++;
                 }
-                if( cycle >= DECELEATIONCNT ){
+                if( cycle >= SUPPRESSCNT ){
                   advance();
                   state = ST_IDLE;
                 }
